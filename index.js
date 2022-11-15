@@ -8,16 +8,6 @@ const gameBoard = (() => {
     return{setBoard}
 })()
 
-//player constructor
-function player(mark, turn) {
-     this.mark = mark;
-     this.turn = turn;
-     this.changeTurn = () => {
-        this.turn = Boolean(this.turn ? "false" : "ture");
-        console.log(this)
-     }
-}
-
 // 
 const displayController = (()=>{
     //get game board element
@@ -32,9 +22,6 @@ const displayController = (()=>{
 })()
 
 const gameController = (() => {
-    //Check player
-    const playerO = new player("O", true);
-    const playerX = new player("X", false);
     //Check win
     const winRules = [  
         [0, 1, 2],
@@ -47,12 +34,19 @@ const gameController = (() => {
         [2, 4, 6],
                 ];
 
+    let playerTurn = true;
+
     const playGame = (id) => {
-        let sign = (playerO.turn===true) ? "O" : "X";
-        gameBoard.setBoard(id, sign)
-        playerO.changeTurn()
-        console.log(playerO)
-        playerX.changeTurn()
+        let sign = "";
+        
+        if (playerTurn===true){
+            sign = "O";
+            playerTurn = false;
+        } else{
+            sign = "X"
+            playerTurn = true;
+        }
+        gameBoard.setBoard(id,sign)
     }
 
     return {playGame};
