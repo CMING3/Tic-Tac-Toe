@@ -1,11 +1,11 @@
 const gameBoard = (() => {
     //build array for game board
-    const board = new Array(9)
+    const board = ["","","","","","","","",""]
     //Place mark
     const setBoard = (index, sign) => {
-        console.log(`${sign} is putting in ${index}`)
+        board[index]=sign
     }
-    return{setBoard}
+    return{board, setBoard}
 })()
 
 // 
@@ -17,8 +17,21 @@ const displayController = (()=>{
             if (e.target.innerHTML !== "") return;
             //start the game here!
             gameController.playGame(e.target.id)
+            renderBoard()
+
         })
     })
+    //change player message
+    const msg = document.querySelector(".player-msg")
+
+    const changeMsg = (sign)=>{
+        //change some message
+    }
+    const renderBoard = () =>{
+        for (let i = 0; i < cells.length; i++) {
+            cells[i].innerHTML = gameBoard.board[i];
+        }
+    }
 })()
 
 const gameController = (() => {
@@ -35,10 +48,10 @@ const gameController = (() => {
                 ];
 
     let playerTurn = true;
-
     const playGame = (id) => {
         let sign = "";
         
+        //change turn
         if (playerTurn===true){
             sign = "O";
             playerTurn = false;
@@ -49,5 +62,5 @@ const gameController = (() => {
         gameBoard.setBoard(id,sign)
     }
 
-    return {playGame};
+    return {playGame, sign};
 })()
