@@ -24,14 +24,20 @@ const displayController = (()=>{
     //change player message
     const msg = document.querySelector(".player-msg")
 
-    const changeMsg = (sign)=>{
+    const changeTurnMsg = (sign)=>{
         //change some message
+        if (sign=="O"){
+            msg.innerHTML="Now is X turn"
+        }else if (sign=="X"){
+            msg.innerHTML="Now is O turn"
+        }
     }
     const renderBoard = () =>{
         for (let i = 0; i < cells.length; i++) {
             cells[i].innerHTML = gameBoard.board[i];
         }
     }
+    return {changeTurnMsg}
 })()
 
 const gameController = (() => {
@@ -60,7 +66,8 @@ const gameController = (() => {
             playerTurn = true;
         }
         gameBoard.setBoard(id,sign)
+        displayController.changeTurnMsg(sign)
     }
 
-    return {playGame, sign};
+    return {playGame};
 })()
