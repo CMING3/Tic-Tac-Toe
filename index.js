@@ -1,6 +1,6 @@
 const gameBoard = (() => {
     //build array for game board
-    const board = ["","","","","","","","",""]
+    let board = ["","","","","","","","",""]
     //Place mark
     const setBoard = (index, sign) => {
         board[index]=sign
@@ -18,18 +18,18 @@ const displayController = (()=>{
             //start the game here!
             gameController.playGame(e.target.id)
             renderBoard()
-
+            gameController.checkWin()
         })
     })
     //change player message
     const msg = document.querySelector(".player-msg")
 
-    const changeTurnMsg = (sign)=>{
+    const changeTurnMsg = (sign) => {
         //change some message
-        if (sign=="O"){
-            msg.innerHTML="Now is X turn"
-        }else if (sign=="X"){
-            msg.innerHTML="Now is O turn"
+        if (sign == "O"){
+            msg.innerHTML = "Now is X turn"
+        }else if (sign == "X"){
+            msg.innerHTML = "Now is O turn"
         }
     }
     const renderBoard = () =>{
@@ -37,7 +37,17 @@ const displayController = (()=>{
             cells[i].innerHTML = gameBoard.board[i];
         }
     }
-    return {changeTurnMsg}
+
+    const resetBtn = document.querySelector(".reset")
+    resetBtn.addEventListener("click", () => {
+        msg.innerHTML = "Now is O turn"
+        gameController.playerTurn = true;
+        gameController.sign = ""
+        gameBoard.board = ["","","","","","","","",""]
+        renderBoard()
+    })
+
+    return {changeTurnMsg, msg}
 })()
 
 const gameController = (() => {
@@ -53,10 +63,34 @@ const gameController = (() => {
         [2, 4, 6],
                 ];
 
+    const checkWin = () => {
+        if (checkOWin()){
+            displayController.msg.innerHTML = "O win !"
+        }else if (checkXWin()){
+            displayController.msg.innerHTML = "X win !"
+        }
+    }
+
+    //check the board with winRule array
+    const checkOWin = () => {
+        return winRules.some((combination) => {
+            return combination.every((index) => {
+                return gameBoard.board[index] === "O"
+            })
+        })
+    }
+    const checkXWin = () => {
+        return winRules.some((combination) => {
+            return combination.every((index) => {
+                return gameBoard.board[index] === "X"
+            })
+        })
+    }
+
     let playerTurn = true;
+    let sign = "";
     const playGame = (id) => {
-        let sign = "";
-        
+         
         //change turn
         if (playerTurn===true){
             sign = "O";
@@ -69,5 +103,5 @@ const gameController = (() => {
         displayController.changeTurnMsg(sign)
     }
 
-    return {playGame};
+    return {playGame, checkWin, playerTurn, sign};
 })()
